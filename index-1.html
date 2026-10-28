@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="my" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Life Pro · Pro Suite</title>
+<style>
+:root{--navy:#0f172a;--blue:#2563eb;--bg:#f8fafc;--card:#ffffff;--text:#0f172a;--muted:#64748b;--border:#e2e8f0;--green:#16a34a;--red:#dc2626;--accent:#7c3aed}
+[data-theme="dark"]{--navy:#090d16;--blue:#3b82f6;--bg:#030712;--card:#111827;--text:#f9fafb;--muted:#9ca3af;--border:#1f2937;--green:#22c55e;--red:#ef4444;--accent:#a78bfa}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans Myanmar",sans-serif;transition:background .3s,color .3s}
+header{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;padding:24px 18px 30px;border-radius:0 0 24px 24px;box-shadow:0 4px 20px rgba(0,0,0,0.1)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}.brand{font-size:12px;letter-spacing:1px;font-weight:700;opacity:.9}
+h1{font-size:22px;margin:6px 0 2px}p.sub{margin:0;font-size:13px;opacity:.85}
+.btn-group{display:flex;gap:6px}.icon-btn{background:rgba(255,255,255,0.2);border:0;color:#fff;padding:8px 12px;border-radius:10px;font-weight:700;cursor:pointer;font-size:12px}
+main{max-width:760px;margin:auto;padding:16px 14px 88px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,0.03)}
+.card h2{font-size:16px;margin:0 0 12px;display:flex;justify-content:space-between;align-items:center}
+.dash-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.metric{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px}.metric strong{display:block;font-size:21px;color:var(--blue)}.metric span{font-size:11px;color:var(--muted)}
+.progress-bar{height:7px;background:var(--border);border-radius:10px;overflow:hidden;margin-top:6px}.progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));width:0%;transition:width .3s}
+.categories{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.cat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:left}
+.cat-card h4{margin:4px 0 2px;font-size:13px}.cat-card small{color:var(--muted);font-size:11px}
+.row-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}.row-item:last-child{border-bottom:0}
+.row-item label{flex:1;font-size:14px}.row-item.done label{text-decoration:line-through;color:var(--muted)}
+.formrow{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}.formrow input,.formrow select,.formrow textarea{flex:1;min-width:0;border:1px solid var(--border);background:var(--bg);color:var(--text);padding:11px;border-radius:10px;font:inherit}
+.btn-primary{background:var(--blue);color:#fff;border:0;padding:11px 16px;border-radius:10px;font-weight:700;cursor:pointer}
+.btn-sec{background:var(--border);color:var(--text);border:0;padding:8px 12px;border-radius:8px;font-weight:600;cursor:pointer;font-size:12px}
+.wallet-box{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
+.w-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px}.w-card span{font-size:11px;color:var(--muted)}.w-card strong{font-size:17px;display:block;margin-top:2px;color:var(--blue)}
+.tabs{display:flex;gap:6px;margin-bottom:12px}.tabs button{flex:1;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:9px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer}
+.tabs button.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.nav-bar{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);display:flex;justify-content:around;padding:10px 8px;z-index:99;backdrop-filter:blur(10px)}
+.nav-bar button{flex:1;background:0;border:0;color:var(--muted);font-size:12px;font-weight:600;padding:8px;border-radius:8px;cursor:pointer}
+.nav-bar button.active{color:var(--blue);background:var(--bg)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;padding:16px;z-index:999}
+.modal-content{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;width:100%;max-width:500px;max-height:85vh;overflow-y:auto}
+@media(min-width:600px){.dash-grid{grid-template-columns:repeat(4,1fr)}.categories{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<header>
+ <div class="top">
+  <div>
+   <div class="brand">DAILY LIFE PRO · PRO SUITE</div>
+   <h1 id="greeting">မင်္ဂလာပါ 👋</h1>
+  </div>
+  <div class="btn-group">
+   <button class="icon-btn" onclick="openModal('settingsModal')">⚙️ ဆက်တင်</button>
+   <button class="icon-btn" id="langBtn" onclick="toggleLang()">မြန်မာ / EN</button>
+  </div>
+ </div>
+ <p class="sub" id="subtitle">Smart Life Planner with KeeNote, Wallet & Goals</p>
+</header>
+
+<main>
+ <div class="date" id="todayDate"></div>
+
+ <section class="card">
+  <h2><span data-my="📊 ဘဝကဏ္ဍခြုံငုံချက်" data-en="📊 Life Areas Dashboard">📊 ဘဝကဏ္ဍခြုံငုံချက်</span> <span id="overallBadge" style="font-size:11px;background:var(--blue);color:#fff;padding:2px 6px;border-radius:6px">0%</span></h2>
+  <div class="dash-grid" style="margin-bottom:14px">
+   <div class="metric"><strong id="overallPct">0%</strong><span data-my="စုစုပေါင်းပြီးစီးမှု" data-en="Overall Progress">စုစုပေါင်းပြီးစီးမှု</span><div class="progress-bar"><div class="progress-fill" id="overallBar"></div></div></div>
+   <div class="metric"><strong id="doneCount">0/0</strong><span data-my="ပြီးစီးသောလုပ်စရာ" data-en="Tasks Done">ပြီးစီးသောလုပ်စရာ</span></div>
+   <div class="metric"><strong id="walletBal">0 ကျပ်</strong><span data-my="Wallet လက်ကျန်" data-en="Wallet Balance">Wallet လက်ကျန်</span></div>
+   <div class="metric"><strong id="activeGoals">0</strong><span data-my="ဆောင်ရွက်ဆဲပန်းတိုင်" data-en="Active Goals">ဆောင်ရွက်ဆဲပန်းတိုင်</span></div>
+  </div>
+  <div class="categories" id="categoriesGrid"></div>
+ </section>
+
+ <section class="card" id="taskSec">
+  <h2>
+   <span data-my="📝 နေ့စဉ်လုပ်စရာ & မှတ်စု (KeeNote)" data-en="📝 KeeNote & Tasks">📝 နေ့စဉ်လုပ်စရာ & မှတ်စု (KeeNote)</span>
+   <button class="btn-sec" onclick="openModal('noteModal')" data-my="+ မှတ်စုရှည်" data-en="+ Long Note">+ မှတ်စုရှည်</button>
+  </h2>
+  <div class="formrow">
+   <input id="taskInput" placeholder="လုပ်စရာအသစ် ထည့်ရန် (eg. KeeNote)...">
+   <input id="taskTime" type="time" style="flex:0 0 110px;">
+   <select id="taskCat" style="flex:0 0 130px;">
+    <option value="work">💼 အလုပ်</option>
+    <option value="study">📚 စာ</option>
+    <option value="health">💚 ကျန်းမာရေး</option>
+    <option value="finance">💰 ငွေကြေး</option>
+    <option value="goals">🎯 ပန်းတိုင်</option>
+   </select>
+   <button class="btn-primary" onclick="addTask()">+</button>
+  </div>
+  <div id="taskList" style="margin-top:12px"></div>
+ </section>
+
+ <section class="card" id="finSec">
+  <h2><span data-my="💰 Wallet & ငွေကြေးစီမံမှု" data-en="💰 Wallet & Finance">💰 Wallet & ငွေကြေးစီမံမှု</span></h2>
+  <div class="wallet-box">
+   <div class="w-card"><span data-my="ဝင်ငွေ" data-en="Income">ဝင်ငွေ</span><strong id="wInc" style="color:var(--green)">0 ကျပ်</strong></div>
+   <div class="w-card"><span data-my="ထွက်ငွေ" data-en="Expense">ထွက်ငွေ</span><strong id="wExp" style="color:var(--red)">0 ကျပ်</strong></div>
+   <div class="w-card"><span data-my="စုငွေ" data-en="Savings">စုငွေ</span><strong id="wSav" style="color:var(--accent)">0 ကျပ်</strong></div>
+   <div class="w-card"><span data-my="လက်ကျန်" data-en="Balance">လက်ကျန်</span><strong id="wBal">0 ကျပ်</strong></div>
+  </div>
+  <div class="formrow">
+   <select id="finType"><option value="income">ဝင်ငွေ (+)</option><option value="expense">ထွက်ငွေ (-)</option><option value="saving">စုငွေ (Save)</option></select>
+   <input id="finDesc" placeholder="ဘာအတွက်လဲ (eg. လစာ၊ စားစရိတ်)">
+   <input id="finAmount" type="number" placeholder="ပမာဏ (ကျပ်)">
+   <button class="btn-primary" onclick="addFin()" data-my="ထည့်မည်" data-en="Add">ထည့်မည်</button>
+  </div>
+  <div id="finList" style="margin-top:12px;max-height:180px;overflow-y:auto"></div>
+ </section>
+
+ <section class="card" id="goalSec">
+  <h2><span data-my="🎯 ရည်မှန်းချက်များ & ဝယ်ရန်ပစ္စည်း (Goals & Purchase)" data-en="🎯 Goals & Purchase">🎯 ရည်မှန်းချက်များ & ဝယ်ရန်ပစ္စည်း</span></h2>
+  <div class="tabs">
+   <button class="active" onclick="setGoalTab('week', this)" data-my="ဤအပတ်" data-en="Week">ဤအပတ်</button>
+   <button onclick="setGoalTab('month', this)" data-my="ဤလ" data-en="Month">ဤလ</button>
+   <button onclick="setGoalTab('year', this)" data-my="ယခုနှစ်" data-en="Year">ယခုနှစ်</button>
+   <button onclick="setGoalTab('purchase', this)" data-my="🛒 ဝယ်ရန်ပစ္စည်း" data-en="Purchase">🛒 ဝယ်ရန်ပစ္စည်း</button>
+  </div>
+  <div id="goalList"></div>
+  <div class="formrow">
+   <input id="goalText" placeholder="ပန်းတိုင် သို့မဟုတ် ဝယ်ယူမည့်ပစ္စည်း...">
+   <input id="goalCost" type="number" placeholder="ကုန်ကျငွေ (ကျပ်)" style="flex:0 0 140px;">
+   <select id="goalTarget" style="flex:0 0 120px;"><option value="week">Week</option><option value="month">Month</option><option value="year">Year</option><option value="purchase">Purchase</option></select>
+   <button class="btn-primary" onclick="addGoal()">+</button>
+  </div>
+ </section>
+</main>
+
+<div class="modal" id="settingsModal">
+ <div class="modal-content">
+  <h2 style="margin-top:0"><span data-my="⚙️ အက်ပ် ဆက်တင်များ" data-en="⚙️ Settings">⚙️ အက်ပ် ဆက်တင်များ</span></h2>
+  <div style="margin-bottom:14px;">
+   <label style="font-size:13px;color:var(--muted);display:block;margin-bottom:6px;" data-my="အပြင်အဆင် (Theme)" data-en="Theme">အပြင်အဆင် (Theme)</label>
+   <select id="themeSelect" onchange="changeTheme(this.value)" style="width:100%;padding:11px;border-radius:10px;background:var(--bg);color:var(--text);border:1px solid var(--border)">
+    <option value="light">☀️ Light Mode (နေ့ဘက်)</option>
+    <option value="dark">🌙 Dark Mode (ညဘက်)</option>
+   </select>
+  </div>
+  <div style="margin-bottom:14px;">
+   <label style="font-size:13px;color:var(--muted);display:block;margin-bottom:6px;" data-my="ဒေတာ စီမံမှု" data-en="Data Management">ဒေတာ စီမံမှု</label>
+   <div style="display:flex;gap:8px;">
+    <button class="btn-sec" onclick="exportJSON()">📤 Export Backup</button>
+    <button class="btn-sec" onclick="resetAll()" style="color:var(--red)">🗑️ အကုန်ဖျက်မည်</button>
+   </div>
+  </div>
+  <div style="text-align:right;margin-top:16px;"><button class="btn-primary" onclick="closeModal('settingsModal')">သိမ်းမည်</button></div>
+ </div>
+</div>
+
+<div class="modal" id="noteModal">
+ <div class="modal-content">
+  <h2 style="margin-top:0"><span data-my="📝 နေ့စဉ် KeeNote မှတ်စု" data-en="📝 KeeNote Note">📝 နေ့စဉ် KeeNote မှတ်စု</span></h2>
+  <textarea id="keeNoteArea" rows="5" placeholder="ဒီနေ့အတွက် အသေးစိတ်မှတ်စုများ ရေးပါ..."></textarea>
+  <div style="text-align:right;margin-top:12px;display:flex;gap:8px;justify-content:flex-end;">
+   <button class="btn-sec" onclick="closeModal('noteModal')">ပိတ်မည်</button>
+   <button class="btn-primary" onclick="saveKeeNote()">သိမ်းမည်</button>
+  </div>
+ </div>
+</div>
+
+<nav class="nav-bar">
+ <button class="active" onclick="scrollToSec('taskSec', this)">📊 Dashboard</button>
+ <button onclick="scrollToSec('taskSec', this)">📝 KeeNote</button>
+ <button onclick="scrollToSec('finSec', this)">💰 Wallet</button>
+ <button onclick="scrollToSec('goalSec', this)">🎯 ပန်းတိုင်</button>
+</nav>
+
+<script>
+const catLabels = {
+  work:['💼','အလုပ်','Work'],
+  study:['📚','စာလေ့လာမှု','Study'],
+  health:['💚','ကျန်းမာရေး','Health'],
+  finance:['💰','ငွေကြေး','Finance'],
+  goals:['🎯','ရည်မှန်းချက်','Goals']
+};
+let lang = 'my';
+let currentTab = 'week';
+
+let db = JSON.parse(localStorage.getItem('dailyLifeProSuiteDB') || 'null') || {
+  theme: 'light',
+  tasks: [
+    {id:1, text:'ဒီနေ့ အရေးကြီးဆုံးအလုပ် ၃ ခု သတ်မှတ်မယ်', cat:'work', done:false, time:'09:00', alarm:true},
+    {id:2, text:'စာလေ့လာချိန် မိနစ် ၃၀ (KeeNote)', cat:'study', done:false, time:'14:00', alarm:false},
+    {id:3, text:'ရေသောက်ပြီး လှုပ်ရှားမှုလုပ်မယ်', cat:'health', done:false, time:'16:00', alarm:true},
+    {id:4, text:'Wallet ဝင်ငွေထွက်ငွေ စာရင်းသွင်းမယ်', cat:'finance', done:false, time:'20:00', alarm:false},
+    {id:5, text:'ပန်းတိုင်အတွက် ခြေလှမ်းတစ်ခုလုပ်မယ်', cat:'goals', done:false, time:'21:00', alarm:false}
+  ],
+  finances: [
+    {id:1, type:'income', desc:'လစာ (Salary)', amount:600000},
+    {id:2, type:'expense', desc:'စားစရိတ် (Food)', amount:200000},
+    {id:3, type:'saving', desc:'ရွှေစုငွေ (Gold)', amount:150000}
+  ],
+  goals: [
+    {id:1, text:'Coding ပရောဂျက် အပြီးသတ်မည်', target:'week', cost:0, done:false},
+    {id:2, text:'စာအုပ် တစ်အုပ်ဖတ်ပြီးစီးမည်', target:'month', cost:15000, done:false},
+    {id:3, text:'နိုင်ငံခြားခရီးစရိတ် စုဆောင်းမည်', target:'year', cost:1200000, done:false},
+    {id:4, text:'Smartphone အသစ်ဝယ်မည်', target:'purchase', cost:500000, done:false}
+  ]
+};
+
+function saveDB(){
+  localStorage.setItem('dailyLifeProSuiteDB', JSON.stringify(db));
+}
+
+function tr(my, en){ return lang === 'my' ? my : en; }
+
+function changeTheme(theme){
+  db.theme = theme;
+  document.body.setAttribute('data-theme', theme);
+  document.getElementById('themeSelect').value = theme;
+  saveDB();
+}
+
+function toggleLang(){
+  lang = lang === 'my' ? 'en' : 'my';
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-my]').forEach(el=>{
+    el.textContent = lang === 'my' ? el.dataset.my : el.dataset.en;
+  });
+  render();
+}
+
+function openModal(id){ document.getElementById(id).style.display = 'flex'; }
+function closeModal(id){ document.getElementById(id).style.display = 'none'; }
+
+function render(){
+  document.body.setAttribute('data-theme', db.theme);
+  document.getElementById('themeSelect').value = db.theme;
+
+  const tEl = document.getElementById('taskList');
+  tEl.innerHTML = '';
+  if(!db.tasks.length) tEl.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:8px">လုပ်စရာမရှိသေးပါ</div>';
+
+  db.tasks.forEach(t=>{
+    const div = document.createElement('div');
+    div.className = 'row-item' + (t.done ? ' done' : '');
+    div.innerHTML = `
+      <input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})">
+      <label><b>${t.text}</b><br><small style="color:var(--muted)">${catLabels[t.cat]?.[lang==='my'?1:2]||t.cat} · ⏰ ${t.time||'--:--'} ${t.alarm?'🔔':''}</small></label>
+      <button class="btn-sec" style="color:var(--red);padding:3px 8px" onclick="delTask(${t.id})">×</button>
+    `;
+    tEl.append(div);
+  });
+
+  const catGrid = document.getElementById('categoriesGrid');
+  catGrid.innerHTML = '';
+  Object.keys(catLabels).forEach(k=>{
+    let rel = db.tasks.filter(t=>t.cat===k);
+    let done = rel.filter(t=>t.done).length;
+    let pct = rel.length ? Math.round(done/rel.length*100) : 0;
+    const box = document.createElement('div');
+    box.className = 'cat-card';
+    box.innerHTML = `
+      <div style="font-size:20px">${catLabels[k][0]}</div>
+      <h4>${catLabels[k][lang==='my'?1:2]}</h4>
+      <small>${done}/${rel.length} ပြီးစီး</small>
+      <div style="font-weight:700;font-size:16px;margin-top:4px">${pct}%</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    `;
+    catGrid.append(box);
+  });
+
+  let inc = db.finances.filter(f=>f.type==='income').reduce((a,b)=>a+b.amount,0);
+  let exp = db.finances.filter(f=>f.type==='expense').reduce((a,b)=>a+b.amount,0);
+  let sav = db.finances.filter(f=>f.type==='saving').reduce((a,b)=>a+b.amount,0);
+  let bal = inc - exp - sav;
+
+  document.getElementById('wInc').textContent = inc.toLocaleString()+' ကျပ်';
+  document.getElementById('wExp').textContent = exp.toLocaleString()+' ကျပ်';
+  document.getElementById('wSav').textContent = sav.toLocaleString()+' ကျပ်';
+  document.getElementById('wBal').textContent = bal.toLocaleString()+' ကျပ်';
+  document.getElementById('walletBal').textContent = bal.toLocaleString()+' ကျပ်';
+
+  const fList = document.getElementById('finList');
+  fList.innerHTML = '';
+  db.finances.slice().reverse().forEach(f=>{
+    let item = document.createElement('div');
+    item.className = 'row-item';
+    let col = f.type==='income'?'var(--green)':f.type==='expense'?'var(--red)':'var(--accent)';
+    item.innerHTML = `
+      <span style="font-weight:bold;color:${col}">${f.type.toUpperCase()}</span>
+      <label>${f.desc}</label>
+      <strong style="color:${col}">${f.amount.toLocaleString()} ကျပ်</strong>
+      <button class="btn-sec" style="padding:3px 8px" onclick="delFin(${f.id})">×</button>
+    `;
+    fList.append(item);
+  });
+
+  const gList = document.getElementById('goalList');
+  gList.innerHTML = '';
+  let fGoals = db.goals.filter(g=>g.target===currentTab);
+  if(!fGoals.length) gList.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:8px">ပန်းတိုင်မရှိသေးပါ</div>';
+
+  fGoals.forEach(g=>{
+    let el = document.createElement('div');
+    el.className = 'row-item' + (g.done?' done':'');
+    el.innerHTML = `
+      <input type="checkbox" ${g.done?'checked':''} onchange="toggleGoal(${g.id})">
+      <label><b>${g.text}</b> ${g.cost>0?`<br><small style="color:var(--blue)">🛒 လိုအပ်ငွေ: ${g.cost.toLocaleString()} ကျပ်</small>`:''}</label>
+      <button class="btn-sec" style="color:var(--red);padding:3px 8px" onclick="delGoal(${g.id})">×</button>
+    `;
+    gList.append(el);
+  });
+
+  let totalT = db.tasks.length;
+  let doneT = db.tasks.filter(t=>t.done).length;
+  let opct = totalT ? Math.round(doneT/totalT*100) : 0;
+  document.getElementById('overallPct').textContent = opct+'%';
+  document.getElementById('overallBadge').textContent = opct+'%';
+  document.getElementById('overallBar').style.width = opct+'%';
+  document.getElementById('doneCount').textContent = doneT+'/'+totalT;
+  document.getElementById('activeGoals').textContent = db.goals.filter(g=>!g.done).length;
+}
+
+function addTask(){
+  const inp = document.getElementById('taskInput');
+  if(!inp.value.trim()) return;
+  db.tasks.push({
+    id: Date.now(),
+    text: inp.value.trim(),
+    cat: document.getElementById('taskCat').value,
+    done: false,
+    time: document.getElementById('taskTime').value || '12:00',
+    alarm: true
+  });
+  inp.value = '';
+  saveDB(); render();
+}
+function toggleTask(id){
+  let t = db.tasks.find(x=>x.id===id);
+  if(t){ t.done = !t.done; saveDB(); render(); }
+}
+function delTask(id){
+  db.tasks = db.tasks.filter(x=>x.id!==id);
+  saveDB(); render();
+}
+
+function addFin(){
+  const desc = document.getElementById('finDesc');
+  const amt = document.getElementById('finAmount');
+  if(!amt.value) return;
+  db.finances.push({
+    id: Date.now(),
+    type: document.getElementById('finType').value,
+    desc: desc.value.trim() || 'General',
+    amount: Number(amt.value)
+  });
+  desc.value = ''; amt.value = '';
+  saveDB(); render();
+}
+function delFin(id){
+  db.finances = db.finances.filter(x=>x.id!==id);
+  saveDB(); render();
+}
+
+function setGoalTab(tab, btn){
+  currentTab = tab;
+  document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+function addGoal(){
+  const txt = document.getElementById('goalText');
+  if(!txt.value.trim()) return;
+  db.goals.push({
+    id: Date.now(),
+    text: txt.value.trim(),
+    target: currentTab,
+    cost: Number(document.getElementById('goalCost').value)||0,
+    done: false
+  });
+  txt.value = ''; document.getElementById('goalCost').value = '';
+  saveDB(); render();
+}
+function toggleGoal(id){
+  let g = db.goals.find(x=>x.id===id);
+  if(g){ g.done = !g.done; saveDB(); render(); }
+}
+function delGoal(id){
+  db.goals = db.goals.filter(x=>x.id!==id);
+  saveDB(); render();
+}
+
+function saveKeeNote(){
+  const body = document.getElementById('keeNoteArea').value;
+  if(!body.trim()) return;
+  db.tasks.push({
+    id: Date.now(),
+    text: '📝 [KeeNote] ' + body.trim().substring(0,45) + '...',
+    cat: 'work',
+    done: false,
+    time: '12:00',
+    alarm: false
+  });
+  document.getElementById('keeNoteArea').value = '';
+  closeModal('noteModal');
+  saveDB(); render();
+}
+
+function exportJSON(){
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
+  const a = document.createElement('a');
+  a.href = dataStr; a.download = "dailylife_pro_backup.json";
+  document.body.appendChild(a); a.click(); a.remove();
+}
+
+function resetAll(){
+  if(confirm('ဒေတာအားလုံးကို ဖျက်ရန် သေချာပါသလား?')){
+    localStorage.removeItem('dailyLifeProSuiteDB');
+    location.reload();
+  }
+}
+
+function scrollToSec(id, btn){
+  document.querySelectorAll('.nav-bar button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+const now = new Date();
+document.getElementById('todayDate').textContent = now.toLocaleDateString('my-MM',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+render();
+</script>
+</html>
